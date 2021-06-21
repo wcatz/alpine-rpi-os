@@ -1,6 +1,6 @@
 #!/bin/bash
 echo ""
-echo "Welcome to the cnode service management script for OpenRC"
+echo "Welcome to the pi-pool service management script for OpenRC"
 echo ""
 echo "What would you like to do?"
 echo ""

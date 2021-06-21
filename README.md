@@ -1,4 +1,4 @@
-# AlpineOS-Cardano-RPi
+# AlPi-Node
 
 ## Why use AlpineOS on the Raspberry Pi? Here are some reasons:
 1) Very low memory consumption (~50MB utilised during idle vs ~350MB for Ubuntu 20.04).
@@ -10,7 +10,7 @@
 4) And finally, why not? If you're gonna use static binaries, might as well take advantage of AlpineOS 😜
 
 ### Initial Setup for AlpineOS on Raspberry Pi 4B 8GB:
-1) Download the AlpineOS for RPi 4 aarch64 here: https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/aarch64/alpine-rpi-3.13.5-aarch64.tar.gz
+1) Download the AlpineOS for RPi 4 aarch64 here: https://dl-cdn.alpinelinux.org/alpine/v3.14/releases/aarch64/alpine-rpi-3.14.0-aarch64.tar.gz
 
 2) Decompress the .tar.gz file and copy it's contents into an SSD/SD card.
 
@@ -24,33 +24,33 @@
 
 7) Reboot.
 
-8) Add a new user called cardano via the command `adduser cardano` and its password as instructed. (For username other than **cardano**, refer to **General Troubleshooting**)
+8) Add a new user called ada via the command `adduser ada` and its password as instructed. (For username other than **ada**, refer to **General Troubleshooting**)
 
 9) Run the following commands to grant the new user full root privileges.
 ```
 apk add sudo
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
-addgroup cardano wheel
-addgroup cardano sys
-addgroup cardano adm
-addgroup cardano root
-addgroup cardano bin
-addgroup cardano daemon
-addgroup cardano disk
-addgroup cardano floppy
-addgroup cardano dialout
-addgroup cardano tape
-addgroup cardano video
+addgroup ada wheel
+addgroup ada sys
+addgroup ada adm
+addgroup ada root
+addgroup ada bin
+addgroup ada daemon
+addgroup ada disk
+addgroup ada floppy
+addgroup ada dialout
+addgroup ada tape
+addgroup ada video
 ```
 
-10) Either exit root via the command `exit` or reboot and login to cardano. You may continue the next steps via SSH for easy copy and paste 😁.
+10) Either exit root via the command `exit` or reboot and login to ada. You may continue the next steps via SSH for easy copy and paste 😁.
 
 11) Install bash to ensure bash script compatibility.
 
     ```
     sudo apk add bash
     ```
-    
+
 12) Also install git, nano and wget, we will need it later.
 
     ```
@@ -86,70 +86,70 @@ Then reboot the system.
     ```
     wget -O ~/aarch64-unknown-linux-musl-cardano-node-1.27.0.zip https://ci.zw3rk.com/build/1758/download/1/aarch64-unknown-linux-musl-cardano-node-1.27.0.zip
     ```
-    
+
 2)  Unzip and install the binaries via the commands.
 
     ```
     unzip -d ~/ aarch64-unknown-linux-musl-cardano-node-1.27.0.zip
-    
-    sudo mv ~/cardano-node/* /usr/local/bin/
+
+    sudo mv ~/cardano-node/* /home/ada/.local/bin/
     ```
-    
+
 
 ## If you have decided to use AlpineOS for your Cardano stake pool operations, you may find this collection of script and services useful.
 ### To install the scripts and services correctly:
 1)  Clone this repo to obtain the neccessary folder and scripts to quickly start your cardano node. You may skip this step if you have already clonned this repo from step 13 when setting up AlpineOS.
-    
+
     ```
     cd ~
     ```
     ```
     git clone https://github.com/armada-alliance/alpine-rpi-os
     ```
-            
-2)  Run the following commands to then install the cnode folder, scripts and services into the correct folders. The **cnode** folder contains everything a cardano-node needs to start as a functional relay node.
+
+2)  Run the following commands to then install the pi-pool folder, scripts and services into the correct folders. The **pi-pool** folder contains everything a cardano-node needs to start as a functional relay node.
 
     ```
     cd ~
     ```
 
     ```        
-    cp -r alpine-rpi-os/alpine_cnode_scripts_and_services/home/cardano/* ~/
+    cp -r alpine-rpi-os/alpine_cnode_scripts_and_services/home/ada/* ~/
     ```
     ```
     sudo cp alpine-rpi-os/alpine_cnode_scripts_and_services/etc/init.d/* /etc/init.d/
     ```
     ```
-    chmod +x ~/start_stop_cnode_service.sh ~/cnode/autorestart_cnode.sh
+    chmod +x ~/start_stop_cnode_service.sh ~/pi-pool/autorestart_cnode.sh
     ```
     ```
     sudo chmod +x /etc/init.d/cardano-node /etc/init.d/prometheus /etc/init.d/node-exporter
     ```
 3)  For faster syncing, consider this optional command for downloading the latest db folder hosted by one of our Alliance members.
-    
+
     ```
-    wget -r -np -nH -R "index.html*" -e robots=off https://db.adamantium.online/db/ -P ~/cnode
+    wget -r -np -nH -R "index.html*" -e robots=off https://db.adamantium.online/db/ -P ~/pi-pool
     ```
-    
-4)  Follow the guide written in **README.txt** contained in the $HOME directory after installing cnode, scripts and services.
-    
+
+4)  Follow the guide written in **README.txt** contained in the $HOME directory after installing pi-pool, scripts and services.
+
     ```
     more ~/README.txt
     ```
 
 ### If you plan on using prometheus and node exporter, do the following:
 1)  Download prometheus and node-exporter into the home directory.
-    
+
     ```
     wget -O ~/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v2.27.1/prometheus-2.27.1.linux-arm64.tar.gz
-    ``` 
+    ```
     ```
     wget -O ~/node_exporter.tar.gz https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-arm64.tar.gz
     ```
 2)  Extract the tarballs.
     ```
     tar -xzvf prometheus.tar.gz
-    ``` 
+    ```
     ```
     tar -xzvf node_exporter.tar.gz
     ```
@@ -157,14 +157,14 @@ Then reboot the system.
 3)  Rename the folders with the following commands.
 
     ```
-    mv prometheus-2.27.1.linux-arm64 prometheus
+    mv prometheus-2.27.1.linux-arm64 /etc/prometheus
     ```
     ```
-    mv node_exporter-1.1.2.linux-arm64 node_exporter
+    mv node_exporter-1.1.2.linux-arm64 /etc/node_exporter
     ```
 
-4)  Follow the guide written in README.txt contained in the $HOME directory after installing cnode, scripts and services to start the services accordingly.
-    
+4)  Follow the guide written in README.txt contained in the $HOME directory after installing pi-pool, scripts and services to start the services accordingly.
+
     ```
     more ~/README.txt
     ```
@@ -174,19 +174,19 @@ Then reboot the system.
 1)  If you happen to use a \<username\> other than cardano, do use the following commands and replace \<username\> with your chosen username.
 
     ```
-    sed -i 's@/home/cardano@/home/<username>@g' ~/cnode_env
+    sed -i 's@/home/ada@/home/<username>@g' ~/cnode_env
     ```
     ```
-    sudo sed -i 's@/home/cardano@/home/<username>@g' /etc/init.d/cardano-node
+    sudo sed -i 's@/home/ada@/home/<username>@g' /etc/init.d/cardano-node
     ```
     ```
-    sudo sed -i 's@/home/cardano@/home/<username>@g' /etc/init.d/prometheus
+    sudo sed -i 's@/home/ada@/home/<username>@g' /etc/init.d/prometheus
     ```
     ```
-    sudo sed -i 's@/home/cardano@/home/<username>@g' /etc/init.d/node-export
+    sudo sed -i 's@/home/ada@/home/<username>@g' /etc/init.d/node-export
     ```
 2)  If you have trouble with port forwarding via SSH, run the following command
-    
+
     ```
     sudo nano /etc/ssh/sshd_config
     ```

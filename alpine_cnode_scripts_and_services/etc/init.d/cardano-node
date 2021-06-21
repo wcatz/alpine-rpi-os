@@ -4,14 +4,14 @@ name=$RC_SVCNAME
 description="Cardano node service"
 
 depend() {
-	after network-online 
+	after network-online
 }
 
-source /home/cardano/cnode_env
+source /home/ada/cnode_env
 start_pre() {
 
 	if [ "$CARDANO_RUN_MODE" = 1 ] || [ "$CARDANO_RUN_MODE" = 2  ]; then
-	  
+
 		if [ ! -d $CARDANO_DB_PATH ]; then
                         eerror ''
                         eerror 'Check CARDANO_DB_PATH in ~/cnode_env'
@@ -54,21 +54,21 @@ start_pre() {
 		if [ "$CARDANO_RUN_MODE" = 2  ]; then
                 	if [ ! -f $CARDANO_VRF_KEY_PATH ]; then
                         	eerror ''
-                        	eerror 'Ensure your poolname.vrf.skey is present in ~/cnode/bp-keys.'
+                        	eerror 'Ensure your poolname.vrf.skey is present in ~/pi-pool.'
 				eerror 'Check CARDANO_VRF_KEY_PATH in ~/cnode_env if file is present.'
                         	eerror ''
                         	return 1
                 	fi
                         if [ ! -f $CARDANO_KES_KEY_PATH ]; then
                                 eerror ''
-                                eerror 'Ensure your poolname.kes.skey is present in ~/cnode/bp-keys.'
+                                eerror 'Ensure your poolname.kes.skey is present in ~/pi-pool.'
                                 eerror 'Check CARDANO_KES_KEY_PATH in ~/cnode_env if file is present.'
                                 eerror ''
                                 return 1
                         fi
                         if [ ! -f $CARDANO_OP_CERT_PATH ]; then
                                 eerror ''
-                                eerror 'Ensure your poolname.opcert is present in ~/cnode/bp-keys.'
+                                eerror 'Ensure your poolname.opcert is present in ~/pi-pool.'
                                 eerror 'Check CARDANO_OP_CERT_PATH in ~/cnode_env if file is present.'
                                 eerror ''
                                 return 1
@@ -77,27 +77,27 @@ start_pre() {
 			if [ `ls -l $CARDANO_VRF_KEY_PATH | wc -l` -gt 1 ]; then
 				eerror ''
 				eerror 'You have multiple VRF signing keys present.'
-				eerror 'Ensure only one *.*vrf*.skey file is placed in the folder ~/cnode/bp-keys'
+				eerror 'Ensure only one *.*vrf*.skey file is placed in the folder ~/pi-pool'
 				eerror ''
 				return 1
 			fi
                         if [ `ls -l $CARDANO_KES_KEY_PATH | wc -l` -gt 1 ]; then
                                 eerror ''
                                 eerror 'You have multiple KES signing keys present.'
-                                eerror 'Ensure only one *.*kes*.skey file is placed in the folder ~/cnode/bp-keys'
+                                eerror 'Ensure only one *.*kes*.skey file is placed in the folder ~/pi-pool'
                                 eerror ''
                                 return 1
                         fi
                         if [ `ls -l $CARDANO_OP_CERT_PATH | wc -l` -gt 1 ]; then
                                 eerror ''
                                 eerror 'You have multiple operational certificates present.'
-                                eerror 'Ensure only one *.opcert file is placed in the folder ~/cnode/bp-keys'
+                                eerror 'Ensure only one *.opcert file is placed in the folder ~/pi-pool'
                                 eerror ''
                                 return 1
                         fi
 
 		echo "Initial checks complete"
-			
+
 		return 0
 		fi
 
@@ -114,7 +114,7 @@ start() {
 
       if [ "$CARDANO_RUN_MODE" = 1 ]; then
         ebegin "Starting $RC_SVCNAME Relay Mode"
-        start-stop-daemon --background --start --exec /usr/local/bin/cardano-node run \
+        start-stop-daemon --background --start --exec /home/ada/.local/bin/cardano-node run \
         --make-pidfile --pidfile /var/run/cardano-node.pid \
         -- --topology $CARDANO_TOPOLOGY_PATH \
            --database-path $CARDANO_DB_PATH \
@@ -123,12 +123,12 @@ start() {
            --port $CARDANO_PORT \
            --config $CARDANO_CONFIG_PATH
         eend $?
-      fi  
- 
+      fi
+
 
       if [ "$CARDANO_RUN_MODE" = 2 ]; then
         ebegin "Starting $RC_SVCNAME Block Producer Mode"
-        start-stop-daemon --background --start --exec /usr/local/bin/cardano-node run \
+        start-stop-daemon --background --start --exec /home/ada/.local/bin/cardano-node run \
         --make-pidfile --pidfile /var/run/cardano-node.pid \
         -- --topology $CARDANO_TOPOLOGY_PATH \
            --database-path $CARDANO_DB_PATH \
@@ -139,7 +139,7 @@ start() {
            --shelley-kes-key $CARDANO_KES_KEY_PATH \
            --shelley-operational-certificate $CARDANO_OP_CERT_PATH
         eend $?
-      fi     
+      fi
 
 }
 
@@ -160,7 +160,7 @@ rcstatus=blank
 		return 0
 	else
 		ebegin "$RC_SVCNAME will auto-restart in $RUNTIME seconds"
-	     	start-stop-daemon --background --start --exec /home/cardano/cnode/autorestart_cnode.sh \
+	     	start-stop-daemon --background --start --exec /home/ada/pi-pool/autorestart_pi-pool.sh \
              	--make-pidfile --pidfile /var/run/cardano-autorestart.pid
 		eend $?
 	fi
@@ -168,9 +168,9 @@ rcstatus=blank
 
 stop() {
 	ebegin "Stopping $RC_SVCNAME"
-        start-stop-daemon --stop --exec /usr/local/bin/cardano-node run \
+        start-stop-daemon --stop --exec /home/ada/.local/bin/cardano-node run \
         --pidfile /var/run/cardano-node.pid \
-        -s 2 
+        -s 2
         eend $?
 }
 
@@ -180,7 +180,7 @@ stop_post() {
                 return 0
         else
 		ebegin "Stopping auto-restart script"
-             	start-stop-daemon --stop --exec /home/cardano/cnode/autorestart_cnode.sh \
+             	start-stop-daemon --stop --exec /home/ada/pi-pool/autorestart_pi-pool.sh \
              	--pidfile /var/run/cardano-autorestart.pid
 		eend $?
 	fi

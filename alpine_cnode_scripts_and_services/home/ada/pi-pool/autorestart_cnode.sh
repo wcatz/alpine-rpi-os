@@ -2,7 +2,7 @@
 
 # This script monitors the cardano-node program and restarts in intervals definded in ~/cnode_env
 
-source /home/cardano/cnode_env
+source /home/ada/cnode_env
 
 if [ $RUNTIME = 0 ]; then 
 

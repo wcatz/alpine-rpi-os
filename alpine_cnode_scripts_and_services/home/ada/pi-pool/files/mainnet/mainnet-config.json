@@ -46,7 +46,7 @@
   "defaultScribes": [
     [
       "FileSK",
-      "/home/cardano/cnode/logs/cardano-node.json"
+      "/home/ada/pi-pool/logs/cardano-node.json"
     ]
   ],
   "hasEKG": 12788,
@@ -82,7 +82,7 @@
     {
       "scFormat": "ScJson",
       "scKind": "FileSK",
-      "scName": "/home/cardano/cnode/logs/cardano-node.json",
+      "scName": "/home/ada/pi-pool/logs/cardano-node.json",
       "scRotation": null
     }
   ]

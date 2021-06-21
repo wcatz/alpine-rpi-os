@@ -9,23 +9,23 @@ export CARDANO_RUN_MODE=1
 
 # Relay Mode
 
-export CARDANO_PORT=3001
-export CARDANO_CONFIG_PATH=/home/cardano/cnode/files/mainnet/mainnet-config.json
-export CARDANO_TOPOLOGY_PATH=/home/cardano/cnode/files/mainnet/mainnet-topology.json
-export CARDANO_DB_PATH=/home/cardano/cnode/db
-export CARDANO_NODE_SOCKET_PATH=/home/cardano/cnode/node.socket
+export CARDANO_PORT=3003
+export CARDANO_CONFIG_PATH=/home/ada/pi-pool/files/mainnet/mainnet-config.json
+export CARDANO_TOPOLOGY_PATH=/home/ada/pi-pool/files/mainnet/mainnet-topology.json
+export CARDANO_DB_PATH=/home/ada/pi-pool/db
+export CARDANO_NODE_SOCKET_PATH=/home/ada/pi-pool/db/socket
 export CARDANO_HOST_ADDRESS=0.0.0.0
 
 
 # Block Producer Mode
 
-# Store the hot keys within ~/cnode/bp-keys
+# Store the hot keys within ~/pi-pool
 # You may adjust the names for the hot key but having the extensions *.kes.skey, *.vrf.skey and *.opcert should suffice
 # Uncomment the 3 entries below to ensure once the hot keys are placed
 
-export CARDANO_KES_KEY_PATH=/home/cardano/cnode/bp-keys/*.*kes*.skey
-export CARDANO_VRF_KEY_PATH=/home/cardano/cnode/bp-keys/*.*vrf*.skey
-export CARDANO_OP_CERT_PATH=/home/cardano/cnode/bp-keys/*.opcert
+export CARDANO_KES_KEY_PATH=/home/ada/pi-pool/*.*kes*.skey
+export CARDANO_VRF_KEY_PATH=/home/ada/pi-pool/*.*vrf*.skey
+export CARDANO_OP_CERT_PATH=/home/ada/pi-pool/*.opcert
 
 
 # Some SPOs may want to restart their cardano-node service at fixed intervals.
@@ -45,5 +45,5 @@ export RUNTIME=28800 # 8 hour intervals
 
 # For Prometheus Use
 
-export PROMETHEUS_LISTEN_ADDRESS=localhost:9090
-export NODE_EXPORTER_LISTEN_ADDRESS=localhost:8100
+export PROMETHEUS_LISTEN_ADDRESS=0.0.0.0:9090
+export NODE_EXPORTER_LISTEN_ADDRESS=0.0.0.0:9100
