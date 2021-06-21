@@ -1,4 +1,4 @@
-#!/sbin/openrc-run
+etc#!/sbin/openrc-run
 
 name=$RC_SVCNAME
 description="Node exporter service"
@@ -12,7 +12,7 @@ start() {
 source /home/ada/cnode_env
 
         ebegin "Starting $RC_SVCNAME"
-        start-stop-daemon --background --start --exec /home/ada/node_exporter/node_exporter \
+        start-stop-daemon --background --start --exec /etc/node_exporter/node_exporter \
         --make-pidfile --pidfile /var/run/node-exporter.pid \
         -- --web.listen-address="$NODE_EXPORTER_LISTEN_ADDRESS"
         eend $?
@@ -34,7 +34,7 @@ rcstatus=blank
 
 stop() {
 	ebegin "Stopping $RC_SVCNAME"
-        start-stop-daemon --stop --exec /home/ada/node_exporter/node_exporter \
+        start-stop-daemon --stop --exec /etc/node_exporter/node_exporter \
         --pidfile /var/run/node-exporter.pid \
         -s 2
         eend $?

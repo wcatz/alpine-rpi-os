@@ -9,20 +9,17 @@ depend() {
 
 start() {
 
-source /home/ada/cnode_env
-
         ebegin "Starting $RC_SVCNAME"
-        start-stop-daemon --background --start --exec /home/ada/prometheus/prometheus \
-        --make-pidfile --pidfile /var/run/prometheus.pid \
-        -- --config.file="/home/ada/prometheus/prometheus.yml" \
-        --web.listen-address="$PROMETHEUS_LISTEN_ADDRESS"
+        start-stop-daemon --background --start --exec /usr/sbin/grafana-server \
+        --make-pidfile --pidfile /var/run/grafana.pid \
+        -- --config.file="/etc/grafana.ini"
         eend $?
 
 }
 
 start_post() {
 rcstatus=blank
-        while [ -f /var/run/prometheus.pid ]
+        while [ -f /var/run/grafana.pid ]
         do
                 sleep 10
                 rcstatus=`rc-service $RC_SVCNAME status | awk '{print $NF}'`
@@ -35,8 +32,8 @@ rcstatus=blank
 
 stop() {
 	ebegin "Stopping $RC_SVCNAME"
-        start-stop-daemon --stop --exec /home/ada/prometheus/prometheus \
-        --pidfile /var/run/prometheus.pid \
+        start-stop-daemon --stop --exec /usr/sbin/grafana-server \
+        --pidfile /var/run/grafana.pid \
         -s 2
         eend $?
 }
