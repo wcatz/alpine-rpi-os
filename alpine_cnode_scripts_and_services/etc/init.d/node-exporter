@@ -1,4 +1,4 @@
-etc#!/sbin/openrc-run
+#!/sbin/openrc-run
 
 name=$RC_SVCNAME
 description="Node exporter service"
