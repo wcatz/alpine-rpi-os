@@ -11,9 +11,9 @@ start() {
 
         ebegin "Starting $RC_SVCNAME"
         start-stop-daemon --background --start --exec /usr/sbin/grafana-server \
-        -- --homepath=/usr/share/grafana \
-        --config=/etc/grafana.ini \
         --make-pidfile --pidfile /var/run/grafana.pid \
+        --  --homepath=/usr/share/grafana \
+            --config=/etc/grafana.ini
         eend $?
 
 }
